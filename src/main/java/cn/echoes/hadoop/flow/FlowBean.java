@@ -1,6 +1,7 @@
 package cn.echoes.hadoop.flow;
 
 import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.WritableComparable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -12,7 +13,7 @@ import java.io.IOException;
  * -------------------------------------
  * Created by liutao on 2017/4/9 23:42.
  */
-public class FlowBean implements Writable {
+public class FlowBean implements WritableComparable<FlowBean> {
 
     private long uFlow;
     private long dFlow;
@@ -47,6 +48,11 @@ public class FlowBean implements Writable {
         this.dFlow = dFlow;
         this.sumFlow = uFlow + dFlow;
     }
+    public void set(long uFlow, long dFlow) {
+        this.uFlow = uFlow;
+        this.dFlow = dFlow;
+        this.sumFlow = uFlow + dFlow;
+    }
 
     @Override
     public void write(DataOutput dataOutput) throws IOException {
@@ -68,5 +74,10 @@ public class FlowBean implements Writable {
     }
 
     public FlowBean() {
+    }
+
+    @Override
+    public int compareTo(FlowBean o) {
+        return this.sumFlow > o.sumFlow ? -1 : 1;
     }
 }
